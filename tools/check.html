@@ -1,0 +1,32 @@
+<!doctype html><meta charset="utf-8"><title>check</title><body><pre id="out">running</pre>
+<script>
+const pages = ["", "rooms", "prices", "dlya-yuridicheskih-lic", "kontakty", "how-to-get", "faq", "otzyvy-o-nas", "oferta",
+  "politika-personalnyh-dannyh", "razmeshchenie-brigad", "dlya-vahtovikov", "dlya-komandirovannyh", "obshchezhitie-dlya-rabochih",
+  "dolgosrochnoe-prozhivanie", "dlya-smennogo-personala", "404"];
+const widths = [360, 390, 768, 1440, 1920];
+const out = [];
+const load = (src, w) => new Promise(res => {
+  const f = document.createElement('iframe'); f.style.width = w + 'px'; f.style.height = '900px'; f.style.border = 0;
+  f.onload = () => setTimeout(() => res(f), 400); f.src = src; document.body.appendChild(f);
+});
+(async () => {
+  const links = new Set();
+  for (const p of pages) {
+    for (const w of widths) {
+      const f = await load('/' + p, w);
+      const d = f.contentDocument;
+      const sw = d.documentElement.scrollWidth, cw = d.documentElement.clientWidth;
+      const h1 = d.querySelectorAll('h1').length;
+      const brokenImg = [...d.images].filter(i => i.complete && i.naturalWidth === 0 && !i.src.includes('mc.yandex')).map(i => i.src);
+      const wide = sw > cw ? [...d.querySelectorAll('body *')].filter(el => el.getBoundingClientRect().right > cw + 1).slice(0, 3).map(el => el.tagName + '.' + el.className) : [];
+      if (w === 390) d.querySelectorAll('a[href]').forEach(a => { const u = new URL(a.getAttribute('href'), location.origin + '/' + p); if (u.origin === location.origin) links.add(u.pathname); });
+      out.push(`${(p || '/').padEnd(32)} ${String(w).padStart(4)}  скролл:${sw > cw ? 'ЕСТЬ ' + sw + '>' + cw + ' ' + wide.join(',') : 'нет'}  h1:${h1}  битых картинок:${brokenImg.length}`);
+      f.remove();
+    }
+  }
+  const bad = [];
+  for (const l of links) { if (l.startsWith('/assets/docs')) continue; const r = await fetch(l); if (!r.ok) bad.push(l + ' ' + r.status); }
+  out.push('внутренних ссылок проверено: ' + links.size + ', битых: ' + bad.length + (bad.length ? '\n  ' + bad.join('\n  ') : ''));
+  document.getElementById('out').textContent = out.join('\n'); document.title = 'done';
+})();
+</script>

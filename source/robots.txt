@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+Disallow: /preview/
+
+# Рекламные, трекинговые и служебные параметры не создают отдельных страниц (директива Яндекса)
+Clean-param: utm_referer&utm_ya_campaign&utm_source&utm_medium&utm_campaign&utm_term&utm_content&utm_candidate&yabizcmpgn&etext&ybaip&erid&yclid&gclid&ysclid&_openstat&from&v&x
+
+Sitemap: https://likehome-hostel.ru/sitemap.xml

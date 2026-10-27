@@ -1,0 +1,43 @@
+<div class="lh-modal">
+  <div class="lh-modal__header">
+    <div class="lh-modal__title">Заявка на бронирование</div>
+    <button class="lh-modal__close" type="button" aria-label="Закрыть">×</button>
+  </div>
+
+  <form class="lh-form" id="lh-booking-form">
+    <label class="lh-field">
+      <span>Имя</span>
+      <input type="text" name="name" required minlength="2" autocomplete="name" />
+    </label>
+
+    <label class="lh-field">
+      <span>Телефон</span>
+      <input type="tel" name="phone" required placeholder="+7 (___) ___-__-__" autocomplete="tel" />
+    </label>
+
+    <div class="lh-row">
+      <label class="lh-field">
+        <span>Дата заселения</span>
+        <input type="date" name="checkin" required />
+      </label>
+
+      <label class="lh-field">
+        <span>Кол-во дней</span>
+        <input type="number" name="days" required min="1" max="60" value="1" />
+      </label>
+    </div>
+
+    <!-- антиспам поле (должно оставаться пустым) -->
+    <input type="text" name="website" class="lh-honey" tabindex="-1" autocomplete="off" />
+
+
+    <label class="lh-consent">
+      <input type="checkbox" name="consent" value="1" required />
+      <span>Я согласен(-на) на обработку моих <a href="/politika-personalnyh-dannyh" target="_blank" rel="noopener">персональных данных</a> в соответствии с политикой Оператора.</span>
+    </label>
+
+    <button class="lh-btn" type="submit">Отправить</button>
+
+    <div class="lh-msg" id="lh-booking-msg" aria-live="polite"></div>
+  </form>
+</div>
